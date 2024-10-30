@@ -10,13 +10,13 @@ public class Profile {
     private boolean notification;
 
     //base obj
-    public Profile{
+    public Profile {
 
     }
 
     //obj to be initialized
     public Profile(String name, String DOB, String email, String phone, String pronoun,
-    String password, boolean notification ){
+                   String password, boolean notification) {
 
     }
 
@@ -77,6 +77,8 @@ public class Profile {
     public void setNotification(boolean notification) {
         this.notification = notification;
     }
+
+    public String toMask(String aString){return mask}
 
     //masks
     /**
