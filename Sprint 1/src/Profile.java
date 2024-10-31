@@ -147,6 +147,13 @@ public class Profile {
         return "X".repeat(aString.length());
     }
 
+    //Profile display no masks
+    private void getProfile() {
+    }
+    //Profile display with masks
+    private void getProfileMasked() {
+    }
+
     /**
      * private String name;
      *     private String dateOfBirth;
