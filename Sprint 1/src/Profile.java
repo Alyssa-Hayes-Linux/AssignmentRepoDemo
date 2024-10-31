@@ -1,3 +1,8 @@
+
+
+package src;
+
+
 public class Profile {
 
     //base variables
@@ -10,13 +15,19 @@ public class Profile {
     private boolean notification;
 
     //base obj
-    public Profile {
-
+    public Profile (){
     }
 
     //obj to be initialized
     public Profile(String name, String DOB, String email, String phone, String pronoun,
                    String password, boolean notification) {
+        setName(name);
+        setDOB(DOB);
+        setEmail(email);
+        setPhone(phone);
+        setPronoun(pronoun);
+        setPassword(password);
+        setNotification(notification);
 
     }
 
@@ -26,7 +37,7 @@ public class Profile {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws FormatException {
         this.name = name;
     }
 
@@ -34,7 +45,7 @@ public class Profile {
         return DOB;
     }
 
-    public void setDOB(String DOB) {
+    public void setDOB(String DOB)throws FormatException {
         this.DOB = DOB;
     }
 
@@ -42,7 +53,7 @@ public class Profile {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email)throws FormatException {
         this.email = email;
     }
 
@@ -66,7 +77,7 @@ public class Profile {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password)throws FormatException {
         this.password = password;
     }
 
@@ -79,6 +90,15 @@ public class Profile {
     }
 
     public String toMask(String aString){return mask}
+
+    //Profile display no masks
+    private void getProfile() {
+    }
+    //Profile display with masks
+    private void getProfileMasked() {
+    }
+
+
 
     //masks
     /**

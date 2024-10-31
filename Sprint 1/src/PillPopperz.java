@@ -14,25 +14,27 @@ public class PillPopperz {
             int select = 0; // character to indicate program section
         while(select != 2) {
             select = homeMenu();
-
-            //if profile already created ask for login else create profile
+            //if profile not already create profile else ask for login
             if (profileComplete == false) {
-
-            } else {
-
+                createProfile();
+            }
+            //Display profile
+            else {
+                profile.getProfileMasked();
             }
 
         }
+
 
             System.out.println("Good Bye :)");
     }
 
     //method to create profile and catch incomplete or incorrect information
-    private int createProfile(){
+    private void createProfile() {
         Scanner in = new Scanner(System.in);
         Profile temp = new Profile();
 
-        while(profileComplete==false) {
+        while (profileComplete == false) {
             try {
                 //Ask for entries
                 System.out.println("Creating a new profile");
@@ -57,10 +59,10 @@ public class PillPopperz {
                 String email = in.nextLine();
                 email = email.trim();
 
-                String password="";
-                String passwordCheck="";
+                String password = "";
+                String passwordCheck = "";
                 boolean match = false;
-                while(!match) {
+                while (!match) {
                     System.out.println("Please enter your password:");
                     String password = in.nextLine();
                     password = password.trim();
@@ -71,18 +73,20 @@ public class PillPopperz {
 
                     if (password.equals(passwordCheck)) {
                         match = true;
-                    }else {
+                    } else {
                         System.out.println("Passwords do not match");
                     }
                 }
 
                 System.out.println("Would you like to turn on a notifications?");
-                int tempSelect=0;
+                int tempSelect = 0;
                 System.out.println("1. Yes");
                 System.out.println("2. No");
                 tempSelect = in.nextInt();
                 boolean notification = false;
-                if(tempSelect == 1) { notification = true }
+                if (tempSelect == 1) {
+                    notification = true
+                }
 
                 //Display entries
                 System.out.println("Is the following information correct?");
@@ -99,7 +103,8 @@ public class PillPopperz {
                 tempSelect = in.nextInt();
 
                 //if yes try creating profile if no then ask for reentry or exit
-                if(tempSelect == 2) { continue;
+                if (tempSelect == 2) {
+                    continue;
                 } else if (tempSelect == 2) {
                     temp = new Profile(name, dateOfBirth, email, phone, pronoun,
                             password, notification);
@@ -112,17 +117,20 @@ public class PillPopperz {
                 profileComplete = true;
 
             } catch (FormatingExeption ex) {
-                int tempSelect=0;
+                int tempSelect = 0;
                 System.out.println("Invalid or incomplete information entered, Profile not created. Would you like to try again?");
                 System.out.println("1. Yes");
                 System.out.println("2. No");
                 System.out.println("3. Back To Home");
-                if(tempSelect == 1) { continue;
+                if (tempSelect == 1) {
+                    continue;
                 } else {
                     break;
                 }
+            }
         }
     }
+
 
     //Formating Exception
     public FormatingException extends Exception {
