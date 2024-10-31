@@ -161,11 +161,5 @@ public class PillPopperz {
             return select;
 
     }
-    //Profile display no masks
-    private void getProfile() {
-    }
-    //Profile display with masks
-    private void getProfileMasked() {
-    }
 
 }
