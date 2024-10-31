@@ -18,14 +18,13 @@ public class PillPopperz {
             if (profileComplete == false) {
                 createProfile();
             }
-            //Display profile
+            //Ask for login
             else {
-                profile.getProfileMasked();
+
+                profile.getProfileMasked();//Display profile
             }
 
         }
-
-
             System.out.println("Good Bye :)");
     }
 

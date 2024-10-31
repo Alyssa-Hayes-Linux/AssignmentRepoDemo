@@ -148,10 +148,10 @@ public class Profile {
     }
 
     //Profile display no masks
-    private void getProfile() {
+    public void getProfile() {
     }
     //Profile display with masks
-    private void getProfileMasked() {
+    public void getProfileMasked() {
     }
 
     /**
