@@ -1,107 +1,187 @@
-//Pill Popperz Super Class
-// Main class for Pill Popperz
-import java.util.Scanner;
 
+import java.lang.reflect.Array;
+import java.util.*;
 public class PillPopperz {
 
-    private Profile profile;
-    private boolean profileComplete = false;
+    public static void main(String[] args)throws DuplicateProfileException {
+        ArrayList<Profile> profileList = new ArrayList<>();
 
-    public static void main(String[] args) {
-        PillPopperz app = new PillPopperz();
-        app.run();
+        int selected = menuProfileSelect(profileList);
+        if(selected == profileList.size() + 1) profileList.add(newProfile());
+
     }
 
-    private void run() {
-        System.out.println("Hello");
-        int select = 0;
-        while (select != 2) {
-            select = homeMenu();
-            if (!profileComplete) {
-                createProfile();
-            } else {
-                profile.getProfileMasked(); // Display masked profile
+    /**
+     *
+     * @param profileList list of profiles
+     * @return number of profile selected or create new profile
+     */
+    public static int menuProfileSelect(ArrayList<Profile> profileList) {
+        int profileNumber = 1;
+        System.out.println("Please select a profile option:");
+        if(!profileList.isEmpty()) {
+            for (Profile p : profileList) {
+                System.out.println("\t" + profileNumber + ". " + p.getName());
+                profileNumber++;
             }
         }
-        System.out.println("Good Bye :)");
+        System.out.println("\t" + profileNumber + ". New profile");
+        Scanner input = new Scanner(System.in);
+        int selected = input.nextInt();
+        while(selected < profileList.size() || selected < 1) {
+            System.out.println("Input not valid. Please choose an available option.");
+            selected = input.nextInt();
+        }
+        return selected;
     }
 
-    private void createProfile() {
-        Scanner in = new Scanner(System.in);
-        Profile temp = new Profile();
+    /**
+     * This method creates a new profile
+     * @return
+     * @throws DuplicateProfileException
+     */
+    public static Profile newProfile() throws DuplicateProfileException {
+        Scanner input = new Scanner(System.in);
 
-        while (!profileComplete) {
+        Profile toReturn = new Profile();
+        //Ask for entries
+        System.out.println("Creating a new profile");
+
+        System.out.println("Please enter your first and last name separated by a space:");
+
+        boolean flag = true;
+        String name = input.nextLine();
+        while(flag) {
+            flag = false;
             try {
-                System.out.println("Creating a new profile");
-
-                System.out.print("Please enter your first and last name: ");
-                String name = in.nextLine().trim();
-
-                System.out.print("Please enter your date of birth (MM/DD/YYYY): ");
-                String dateOfBirth = in.nextLine().trim();
-
-                System.out.print("Please enter your pronouns: ");
-                String pronoun = in.nextLine().trim();
-
-                System.out.print("Please enter your phone number (XXX)XXX-XXXX: ");
-                String phone = in.nextLine().trim();
-
-                System.out.print("Please enter your email address: ");
-                String email = in.nextLine().trim();
-
-                String password = "";
-                String passwordCheck = "";
-                boolean match = false;
-
-                while (!match) {
-                    System.out.print("Please enter your password: ");
-                    password = in.nextLine().trim();
-
-                    System.out.print("Please reenter your password: ");
-                    passwordCheck = in.nextLine().trim();
-
-                    if (password.equals(passwordCheck)) {
-                        match = true;
-                    } else {
-                        System.out.println("Passwords do not match. Try again.");
-                    }
-                }
-
-                System.out.print("Would you like to turn on notifications? (1 for Yes, 2 for No): ");
-                boolean notification = in.nextInt() == 1;
-                in.nextLine(); // Consume the newline
-
-                // Create a new Profile
-                temp = new Profile(name, dateOfBirth, email, phone, pronoun, password, notification);
-                profile = temp;
-                profileComplete = true;
-                System.out.println("Profile created successfully");
-
-            } catch (FormatingException ex) {
-                System.out.println("An error occurred while creating the profile. Please try again.");
-            } catch (DuplicateProfileException ex) {
-                System.out.println(ex.getMessage());
+                toReturn.setName(name.trim());
+            } catch (FormatingException e) {
+                System.out.println("Please enter your first and last name seperated by a space.");
+                name = input.nextLine();
+                flag = true;
             }
         }
+
+        System.out.println("Please enter your date of birth in MM/DD/YYYY format:");
+
+        flag = true;
+        String dateOfBirth = input.nextLine();
+        while(flag) {
+            flag = false;
+            try {
+                toReturn.setDateOfBirth(dateOfBirth.trim());
+            } catch (FormatingException e) {
+                System.out.println("Please enter a valid date.");
+                dateOfBirth = input.nextLine();
+                flag = true;
+            }
+        }
+
+        System.out.println("Please enter your pronouns:");
+        String pronoun = input.nextLine();
+        toReturn.setPronoun(pronoun.trim());
+
+        System.out.println("Please enter your phone number in (XXX)XXX-XXXX format:");
+        flag = true;
+        String phone = input.nextLine();
+        while(flag) {
+            flag = false;
+            try {
+                toReturn.setPhone(phone.trim());
+            } catch (FormatingException e) {
+                System.out.println("Please enter a valid phone number.");
+                phone = input.nextLine();
+                flag = true;
+            }
+        }
+
+
+        System.out.println("Please enter your email address, this will be your username:");
+        flag = true;
+        String email = input.nextLine();
+        while(flag) {
+            flag = false;
+            try {
+                toReturn.setEmail(email.trim());
+            } catch (FormatingException e) {
+                System.out.println("Please enter a valid email.");
+                email = input.nextLine();
+                flag = true;
+            }
+        }
+
+        String password = "";
+        String passwordCheck = "0";
+        flag = false;
+        while (!password.equals(passwordCheck)) {
+
+            if(flag) System.out.println("Passwords do not match");
+            flag = true;
+
+            System.out.println("Please enter your password:");
+            password = input.nextLine();
+            password = password.trim();
+
+            System.out.println("Please reenter your password:");
+            passwordCheck = input.nextLine();
+            passwordCheck = passwordCheck.trim();
+
+        }
+        toReturn.setPassword(password);
+        System.out.println("Would you like to turn on a notifications?");
+        int tempSelect = 0;
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+        tempSelect = input.nextInt();
+        toReturn.setNotification(tempSelect == 1);
+
+        //Display entries
+        System.out.println("Is the following information correct?");
+        System.out.println("Name: " + name);
+        System.out.println("Date of birth: " + dateOfBirth);
+        System.out.println("Phone number: " + phone);
+        System.out.println("Email: " + email);
+        System.out.println("Password: " + password);
+        System.out.println("Notifications on? " + toReturn.isNotification());
+
+        System.out.println("1. Yes / Save");
+        System.out.println("2. No / Try Again");
+        System.out.println("3. Back To Home");
+
+        for(int i = 0; i < 2; i++) {
+            tempSelect = input.nextInt();
+            switch(tempSelect) {
+                case 1:
+                    System.out.println("Profile created successfully");
+                    return(toReturn);
+                case 2: return(newProfile());
+                case 3: return null;
+                default:
+                    System.out.println("Please select an available option.");
+            }
+        }
+        System.out.println("There was an error creating your profile. Please try again.");
+        return null;
     }
 
-    private int homeMenu() {
-        System.out.println("Welcome to Pill Popperz");
-        System.out.println("Home Page");
-        if (!profileComplete) {
-            System.out.println("1. New Profile");
-            System.out.println("2. Exit");
-        } else {
-            System.out.println("1. View Profile");
-            System.out.println("2. Exit");
+
+    //NEW METHOD HERE
+
+    /**
+     * This method will accept a profile obj and give you the options to look into the details of whatever profile has been input
+     * @param profile user profile entered in main interface
+     */
+    public static void MainMenu(Profile profile){
+        Scanner scnr = new Scanner(System.in);
+        System.out.println("Press 1 to go to view profile");
+        System.out.println("Press 2 to go to medication list");
+        int input = scnr.nextInt();
+        if (input == 1){
+            System.out.println(profile.toString());
         }
-        int select = 0;
-        Scanner in = new Scanner(System.in);
-        while (select != 1 && select != 2) {
-            System.out.print("Enter your choice: ");
-            select = in.nextInt();
+        else if (input == 2){
+            //Later
         }
-        return select;
+
     }
 }
-

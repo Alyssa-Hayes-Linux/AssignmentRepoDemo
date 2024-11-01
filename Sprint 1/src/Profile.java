@@ -29,21 +29,10 @@ import java.util.regex.Pattern;
 
         }
 
-        // Constructor to initialize fields with validation
-        public Profile(String name, String dateOfBirth, String email, String phone, String pronoun,
-                       String password, boolean notification) throws FormatingException, DuplicateProfileException {
-            setName(name);
-            setDateOfBirth(dateOfBirth);
-            setEmail(email);
-            setPhone(phone);
-            this.pronoun = pronoun;
-            setPassword(password);
-            this.notification = notification;
-        }
 
         // Setters with validation
         public void setName(String name) throws FormatingException {
-            if (name == null || name.trim().isEmpty()) {
+           if (name == null || name.trim().isEmpty() || !name.contains(" ") || name.indexOf(" ") == 0 || name.indexOf(" ") == name.length()-1) {
                 throw new FormatingException("Invalid name format.");
             }
             this.name = name;
@@ -96,6 +85,17 @@ import java.util.regex.Pattern;
         public String toMask(String aString) {
             StringBuilder s = new StringBuilder();
             for(char c : aString.toCharArray()) {
+                if((int)c <48 || (int)c > 90) {
+                    s.append(c);
+                }
+                else s.append("X");
+            }
+            return s.toString();
+        }
+
+        public String toMaskPassword(String password) {
+            StringBuilder s = new StringBuilder();
+            for(char c : password.toCharArray()) {
                 s.append("X");
             }
             return s.toString();
@@ -104,12 +104,12 @@ import java.util.regex.Pattern;
         // Profile display with masks
         public void getProfileMasked() {
             System.out.println("User Profile (Masked):" +
-                    "\nName: " + toMask(name) +
+                    "\nName: " + name +
                     "\nDate of Birth: " + toMask(dateOfBirth) +
                     "\nEmail: " + toMask(email) +
                     "\nPhone: " + toMask(phone) +
-                    "\nPronouns: " + toMask(pronoun) +
-                    "\nPassword: " + toMask(password));
+                    "\nPronouns: " + pronoun +
+                    "\nPassword: " + toMaskPassword(password));
         }
 
         // Override toString method
