@@ -1,8 +1,7 @@
 import java.io.IOException;
-
-public class Profile {
-
-    import java.util.regex.Pattern;
+import java.io.*;
+import java.util.HashSet;
+import java.util.regex.Pattern;
 
     public class Profile {
 
@@ -20,13 +19,14 @@ public class Profile {
 
         // Default constructor
         public Profile() {
-            this.name = null;
-            this.dateOfBirth = null;
-            this.email = null;
-            this.phone = null;
-            this.pronoun = null;
-            this.password = null;
+            this.name = "Not on file";
+            this.dateOfBirth = "Not on file";
+            this.email = "Not on file";
+            this.phone = "Not on file";
+            this.pronoun = "Not on file";
+            this.password = "";
             this.notification = false;
+
         }
 
         // Constructor to initialize fields with validation
@@ -94,7 +94,11 @@ public class Profile {
 
         // Masks sensitive information
         public String toMask(String aString) {
-            return "X".repeat(aString.length());
+            StringBuilder s = new StringBuilder();
+            for(char c : aString.toCharArray()) {
+                s.append("X");
+            }
+            return s.toString();
         }
 
         // Profile display with masks
@@ -117,6 +121,6 @@ public class Profile {
                     "\nEmail: " + email +
                     "\nPhone: " + phone +
                     "\nPronouns: " + pronoun +
-                    "\nPassword: " + toMask(password);
+                    "\nPassword: " + password;
         }
     }

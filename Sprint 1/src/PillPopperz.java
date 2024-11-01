@@ -1,6 +1,4 @@
 //Pill Popperz Super Class
-
-package src;
 // Main class for Pill Popperz
 import java.util.Scanner;
 
