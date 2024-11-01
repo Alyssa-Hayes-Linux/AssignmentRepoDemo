@@ -6,6 +6,9 @@ public class Profile {
 
     public class Profile {
 
+        // Static variable to store used emails
+        private static HashSet<String> emailTree = new HashSet<>();
+
         // Base variables
         private String name;
         private String dateOfBirth; // Format: MM/DD/YYYY
@@ -28,7 +31,7 @@ public class Profile {
 
         // Constructor to initialize fields with validation
         public Profile(String name, String dateOfBirth, String email, String phone, String pronoun,
-                       String password, boolean notification) throws FormatingException {
+                       String password, boolean notification) throws FormatingException, DuplicateProfileException {
             setName(name);
             setDateOfBirth(dateOfBirth);
             setEmail(email);
@@ -54,12 +57,15 @@ public class Profile {
             this.dateOfBirth = dateOfBirth;
         }
 
-        public void setEmail(String email) throws FormatingException {
-            // Basic regex for email format
+        public void setEmail(String email) throws FormatingException, DuplicateProfileException {
             if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
                 throw new FormatingException("Invalid email format.");
             }
+            if (emailTree.contains(email)) {
+                throw new DuplicateProfileException("Email is already in use.");
+            }
             this.email = email;
+            emailTree.add(email); // Add email to the set
         }
 
         public void setPhone(String phone) throws FormatingException {

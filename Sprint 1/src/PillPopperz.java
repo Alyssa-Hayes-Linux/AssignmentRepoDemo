@@ -79,8 +79,10 @@ public class PillPopperz {
                 profileComplete = true;
                 System.out.println("Profile created successfully");
 
-            } catch (Exception ex) {
+            } catch (FormatingException ex) {
                 System.out.println("An error occurred while creating the profile. Please try again.");
+            } catch (DuplicateProfileException ex) {
+                System.out.println(ex.getMessage());
             }
         }
     }
