@@ -1,175 +1,122 @@
 import java.io.IOException;
+
 public class Profile {
 
-    //base variables
-    private String name;
-    private String dateOfBirth;
-    private String email;
-    private String phone;
-    private String pronoun;
-    private String password;
-    private boolean notification;
+    import java.util.regex.Pattern;
 
-    //base obj
-    public Profile {
-        this.name = null;
-        this.dateOfBirth = null;
-        this.email = null;
-        this.phone = null;
-        this.pronoun = null;
-        this.password = null;
-        this.notification = false;
+    public class Profile {
 
-    }
+        // Static variable to store used emails
+        private static HashSet<String> emailTree = new HashSet<>();
 
-    //obj to be initialized
-    public Profile(String name, String dateOfBirth, String email, String phone, String pronoun,
-                   String password, boolean notification) {
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.email = email;
-        this.phone = phone;
-        this.pronoun = pronoun;
-        this.password = password;
-        this.notification = notification;
+        // Base variables
+        private String name;
+        private String dateOfBirth; // Format: MM/DD/YYYY
+        private String email;
+        private String phone; // Format: (XXX)XXX-XXXX
+        private String pronoun;
+        private String password;
+        private boolean notification;
 
-
-    }
-
-    //getters and setters
-
-    public String getName() {
-        try {
-            return name;
-        }catch (NullPointerException e){
-            System.out.println("please enter a valid field");
-        }catch (InputMismatchException e){
-            System.out.println("please enter a valid field");
-
+        // Default constructor
+        public Profile() {
+            this.name = null;
+            this.dateOfBirth = null;
+            this.email = null;
+            this.phone = null;
+            this.pronoun = null;
+            this.password = null;
+            this.notification = false;
         }
 
-    }
+        // Constructor to initialize fields with validation
+        public Profile(String name, String dateOfBirth, String email, String phone, String pronoun,
+                       String password, boolean notification) throws FormatingException, DuplicateProfileException {
+            setName(name);
+            setDateOfBirth(dateOfBirth);
+            setEmail(email);
+            setPhone(phone);
+            this.pronoun = pronoun;
+            setPassword(password);
+            this.notification = notification;
+        }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        // Setters with validation
+        public void setName(String name) throws FormatingException {
+            if (name == null || name.trim().isEmpty()) {
+                throw new FormatingException("Invalid name format.");
+            }
+            this.name = name;
+        }
 
-    public String getDateOfBirth() {
-        try {
-            return dateOfBirth;
-        } catch (NullPointerException e) {
-            System.out.println("please enter a valid field");
+        public void setDateOfBirth(String dateOfBirth) throws FormatingException {
+            // Simple regex for MM/DD/YYYY format
+            if (!Pattern.matches("(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/(\\d{4})", dateOfBirth)) {
+                throw new FormatingException("Invalid date of birth format. Use MM/DD/YYYY.");
+            }
+            this.dateOfBirth = dateOfBirth;
+        }
 
-        } catch (InputMismatchException e) {
-            System.out.println("please enter a valid field");
+        public void setEmail(String email) throws FormatingException, DuplicateProfileException {
+            if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
+                throw new FormatingException("Invalid email format.");
+            }
+            if (emailTree.contains(email)) {
+                throw new DuplicateProfileException("Email is already in use.");
+            }
+            this.email = email;
+            emailTree.add(email); // Add email to the set
+        }
 
+        public void setPhone(String phone) throws FormatingException {
+            // Regex for phone number format (XXX)XXX-XXXX
+            if (!Pattern.matches("\\(\\d{3}\\)\\d{3}-\\d{4}", phone)) {
+                throw new FormatingException("Invalid phone number format. Use (XXX)XXX-XXXX.");
+            }
+            this.phone = phone;
+        }
+
+        public void setPronoun(String pronoun) {
+            this.pronoun = pronoun;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public boolean isNotification() {
+            return notification;
+        }
+
+        public void setNotification(boolean notification) {
+            this.notification = notification;
+        }
+
+        // Masks sensitive information
+        public String toMask(String aString) {
+            return "X".repeat(aString.length());
+        }
+
+        // Profile display with masks
+        public void getProfileMasked() {
+            System.out.println("User Profile (Masked):" +
+                    "\nName: " + toMask(name) +
+                    "\nDate of Birth: " + toMask(dateOfBirth) +
+                    "\nEmail: " + toMask(email) +
+                    "\nPhone: " + toMask(phone) +
+                    "\nPronouns: " + toMask(pronoun) +
+                    "\nPassword: " + toMask(password));
+        }
+
+        // Override toString method
+        @Override
+        public String toString() {
+            return "User Profile:" +
+                    "\nName: " + name +
+                    "\nDate of Birth: " + dateOfBirth +
+                    "\nEmail: " + email +
+                    "\nPhone: " + phone +
+                    "\nPronouns: " + pronoun +
+                    "\nPassword: " + toMask(password);
         }
     }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getEmail() {
-       try {
-           return email;
-       }catch (NullPointerException e){
-           System.out.println("please enter a valid field");
-
-       }
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-       try{ return phone;
-       }catch (NullPointerException e){
-           System.out.println("please enter a valid field");
-
-       }catch (InputMismatchException e){
-           System.out.println("please enter a valid field");
-
-       }
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPronoun() {
-        try{ return pronoun;
-        }catch (NullPointerException e){
-            System.out.println("please enter a valid field");
-
-        }catch (InputMismatchException e){
-            System.out.println("please enter a valid field");
-
-        }
-    }
-
-    public void setPronoun(String pronoun) {
-        this.pronoun = pronoun;
-    }
-
-    public String getPassword() {
-       try {
-           return password;
-       }catch (NullPointerException e){
-           System.out.println("please enter a valid field");
-
-       }
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isNotification() {
-        return notification;
-    }
-
-    public void setNotification(boolean notification) {
-        this.notification = notification;
-    }
-
-    //masks
-    /**
-     * needed for:
-     *  DOB
-     *  email
-     *  phone
-     *  password
-     */
-
-    public String toMask(String aString){
-        return "X".repeat(aString.length());
-    }
-
-    //Profile display no masks
-    private void getProfile() {
-    }
-    //Profile display with masks
-    private void getProfileMasked() {
-    }
-
-    /**
-     * private String name;
-     *     private String dateOfBirth;
-     *     private String email;
-     *     private String phone;
-     *     private String pronoun;
-     *     private String password;
-     *     private boolean notification;
-     */
-    public void toString(){
-        System.out.println("User Profile:" +
-                "\nName:" + name +
-                "\nDate of Birth:" + toMask(dateOfBirth) +
-                "\nEmail: " + email +
-                "\nPhone: " + toMask(phone) +
-                "\nPronouns: " + pronoun +
-                "\nPassword: " + password + );
-    }
-}
