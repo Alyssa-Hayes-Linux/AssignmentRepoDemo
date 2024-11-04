@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
     public class Profile {
 
         // Static variable to store used emails
-        private static HashSet<String> emailTree = new HashSet<>();
+
 
         // Base variables
         private String name;
@@ -66,11 +66,7 @@ import java.util.regex.Pattern;
                 }
             }
             if(!flag) throw new FormatingException();
-            if (emailTree.contains(email)) {
-                throw new DuplicateProfileException("Email is already in use.");
-            }
             this.email = email;
-            emailTree.add(email); // Add email to the set
         }
 
         public void setPhone(String phone) throws FormatingException {
@@ -117,12 +113,21 @@ import java.util.regex.Pattern;
             return s.toString();
         }
 
+        public String toMaskEmail(String email){
+            StringBuilder s = new StringBuilder();
+            for(char c : email.toCharArray()) {
+                if(c == '@') break;
+                s.append('X');
+            }
+           return String.valueOf(s.append(email.substring(email.indexOf("@"))));
+        }
+
         // Profile display with masks
-        public void getProfileMasked() {
-            System.out.println("User Profile (Masked):" +
+        public String toStringMasked() {
+            return("User Profile (password not entered):" +
                     "\nName: " + name +
                     "\nDate of Birth: " + toMask(dateOfBirth) +
-                    "\nEmail: " + toMask(email) +
+                    "\nEmail: " + toMaskEmail(email) +
                     "\nPhone: " + toMask(phone) +
                     "\nPronouns: " + pronoun +
                     "\nPassword: " + toMaskPassword(password));
