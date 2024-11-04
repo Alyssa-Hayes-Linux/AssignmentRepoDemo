@@ -1,8 +1,7 @@
 import java.io.IOException;
-
-public class Profile {
-
-    import java.util.regex.Pattern;
+import java.io.*;
+import java.util.HashSet;
+import java.util.regex.Pattern;
 
     public class Profile {
 
@@ -20,30 +19,20 @@ public class Profile {
 
         // Default constructor
         public Profile() {
-            this.name = null;
-            this.dateOfBirth = null;
-            this.email = null;
-            this.phone = null;
-            this.pronoun = null;
-            this.password = null;
+            this.name = "Not on file";
+            this.dateOfBirth = "Not on file";
+            this.email = "Not on file";
+            this.phone = "Not on file";
+            this.pronoun = "Not on file";
+            this.password = "";
             this.notification = false;
+
         }
 
-        // Constructor to initialize fields with validation
-        public Profile(String name, String dateOfBirth, String email, String phone, String pronoun,
-                       String password, boolean notification) throws FormatingException, DuplicateProfileException {
-            setName(name);
-            setDateOfBirth(dateOfBirth);
-            setEmail(email);
-            setPhone(phone);
-            this.pronoun = pronoun;
-            setPassword(password);
-            this.notification = notification;
-        }
 
         // Setters with validation
         public void setName(String name) throws FormatingException {
-            if (name == null || name.trim().isEmpty()) {
+           if (name == null || name.trim().isEmpty() || !name.contains(" ") || name.indexOf(" ") == 0 || name.indexOf(" ") == name.length()-1) {
                 throw new FormatingException("Invalid name format.");
             }
             this.name = name;
@@ -94,18 +83,33 @@ public class Profile {
 
         // Masks sensitive information
         public String toMask(String aString) {
-            return "X".repeat(aString.length());
+            StringBuilder s = new StringBuilder();
+            for(char c : aString.toCharArray()) {
+                if((int)c <48 || (int)c > 90) {
+                    s.append(c);
+                }
+                else s.append("X");
+            }
+            return s.toString();
+        }
+
+        public String toMaskPassword(String password) {
+            StringBuilder s = new StringBuilder();
+            for(char c : password.toCharArray()) {
+                s.append("X");
+            }
+            return s.toString();
         }
 
         // Profile display with masks
         public void getProfileMasked() {
             System.out.println("User Profile (Masked):" +
-                    "\nName: " + toMask(name) +
+                    "\nName: " + name +
                     "\nDate of Birth: " + toMask(dateOfBirth) +
                     "\nEmail: " + toMask(email) +
                     "\nPhone: " + toMask(phone) +
-                    "\nPronouns: " + toMask(pronoun) +
-                    "\nPassword: " + toMask(password));
+                    "\nPronouns: " + pronoun +
+                    "\nPassword: " + toMaskPassword(password));
         }
 
         // Override toString method
@@ -117,7 +121,7 @@ public class Profile {
                     "\nEmail: " + email +
                     "\nPhone: " + phone +
                     "\nPronouns: " + pronoun +
-                    "\nPassword: " + toMask(password);
+                    "\nPassword: " + password;
         }
         public void main(){
             Public("Alyssa Hayes", "04/30/2005", "hayesae9@vcu.edu", "888-555-5555", "she/her",
