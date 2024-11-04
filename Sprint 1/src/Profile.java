@@ -31,12 +31,19 @@ import java.util.regex.Pattern;
 
 
         // Setters with validation
+
+        //DO NOT CHANGE
         public void setName(String name) throws FormatingException {
            if (name == null || name.trim().isEmpty() || !name.contains(" ") || name.indexOf(" ") == 0 || name.indexOf(" ") == name.length()-1) {
                 throw new FormatingException("Invalid name format.");
             }
             this.name = name;
         }
+
+        public String getName() {
+            return name;
+        }
+
 
         public void setDateOfBirth(String dateOfBirth) throws FormatingException {
             // Simple regex for MM/DD/YYYY format
@@ -47,9 +54,18 @@ import java.util.regex.Pattern;
         }
 
         public void setEmail(String email) throws FormatingException, DuplicateProfileException {
+            String[] domains = {"@gmail.com", "@aol", "@yahoo.com", "@outlook.com", "@vcu.edu"};
             if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
                 throw new FormatingException("Invalid email format.");
             }
+            boolean flag = false;
+            for(String s : domains) {
+                if (email.endsWith(s)) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag) throw new FormatingException();
             if (emailTree.contains(email)) {
                 throw new DuplicateProfileException("Email is already in use.");
             }
