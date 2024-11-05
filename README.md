@@ -4,7 +4,7 @@ My groupmembers are:
 - Evan Munni
 - Isha Malik
 - Mack Hicks
-- Mustafa
+- Mustafa Baig
 
 
 Our project is an alarm system designed to help users manage their medications effectively. This application

@@ -7,9 +7,78 @@ public class PillPopperz {
 
     public static void main(String[] args) throws DuplicateProfileException {
         ArrayList<Profile> profileList = new ArrayList<>();
+        HashSet<String> emailTree = new HashSet<>();
+        boolean exit = false;
 
-        int selected = menuProfileSelect(profileList);
-        if(selected == profileList.size() + 1) profileList.add(newProfile());
+        while (!exit) {
+            int choice = mainMenu();
+            switch (choice) {
+                case 1: // Select or Create Profile
+                    int selected = menuProfileSelect(profileList);
+                    if (selected == profileList.size() + 1) {
+                        Profile newProfile = newProfile(emailTree);
+                        if (newProfile != null) {
+                            profileList.add(newProfile);
+                            System.out.println("Profile successfully created and saved.");
+                        }
+                    } else if (selected <= profileList.size()) {
+                        // Logic to access an existing profile
+                        Profile selectedProfile = profileList.get(selected - 1);
+                        mainMenu(selectedProfile); // View or edit selected profile
+                    }
+                    break;
+                case 2: // View All Profiles
+                    viewProfiles(profileList);
+                    break;
+                case 3: // Exit
+                    exit = true;
+                    System.out.println("Exiting the application.");
+                    break;
+                default:
+                    System.out.println("Please select a valid option.");
+            }
+        }
+    }
+
+    /**
+     * Main menu display and selection
+     *
+     * @return user's menu selection
+     */
+    public static int mainMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Main Menu:");
+        System.out.println("1. Select or Create Profile");
+        System.out.println("2. View All Profiles");
+        System.out.println("3. Exit");
+        System.out.print("Please select an option: ");
+        return input.nextInt();
+    }
+
+    /**
+     * This method displays all profiles in profileList.
+     *
+     * @param profileList list of profiles
+     */
+    public static void viewProfiles(ArrayList<Profile> profileList) {
+        if (profileList.isEmpty()) {
+            System.out.println("No profiles available.");
+        } else {
+            System.out.println("Current profiles:");
+            for (int i = 0; i < profileList.size(); i++) {
+                System.out.println((i + 1) + ". " + profileList.get(i).getName());
+            }
+        }
+    }
+
+
+    /**
+     * Main menu for selected profile actions
+     *
+     * @param profile user profile
+     */
+
+
 
     /**
      * @param profileList list of profiles
@@ -103,7 +172,13 @@ public class PillPopperz {
             flag = false;
             try {
                 toReturn.setEmail(email.trim());
+
+                if(emailTree.contains(email)){
+                    throw new DuplicateProfileException();
+                }
+
                 emailTree.add(email); // Add email to the set
+
             } catch (FormatingException e) {
                 System.out.println("Please enter a valid email.");
                 email = input.nextLine();
