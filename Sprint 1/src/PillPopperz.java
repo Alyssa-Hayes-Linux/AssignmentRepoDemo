@@ -250,15 +250,21 @@ public class PillPopperz {
      *
      * @param profile user profile entered in main interface
      */
-    //TODO: NEEDS SUPPORT FOR CHOOSING AN INVALID OPTION
     public static void mainMenu(Profile profile) {
+        boolean flag = true;
         Scanner input = new Scanner(System.in);
+
         System.out.println("Please select an option: \n\t1. View profile\n\t2. View medications");
-        int option = input.nextInt();
-        if (option == 1) {
-            System.out.println(profile.toStringMasked());
-        } else if (option == 2) {
-            medMenu(profile);
+
+        while (flag) {
+            int option = input.nextInt();
+            if (option == 1) {
+                System.out.println(profile.toStringMasked());
+                flag = false;
+            } else if (option == 2) {
+                medMenu(profile);
+                flag = false;
+            }else { System.out.println("Please select a valid option"); }
         }
     }
 
@@ -292,7 +298,8 @@ public class PillPopperz {
      */
     public static void newMed(Profile profile) {
         Scanner input = new Scanner(System.in);
-        System.out.println("Please enter the medication name or nickname:");
+        System.out.println("Please enter the medication name (generic or brand name):");
+
         String tempName = input.nextLine();
 
         Med newMed = new Med();
@@ -301,8 +308,18 @@ public class PillPopperz {
         boolean flag = true;
         while (flag) {
             try {
-                newMed.setName(tempName);
-                flag = false;
+                for(ValidMeds med : ValidMeds.values()){
+                    if(tempName.equalsIgnoreCase(med.toString())){
+                        newMed.setName(tempName);
+                        flag = false;
+                        break;
+                    }
+
+                }
+                if (flag){
+                    throw new Exception();
+                }
+
             } catch (Exception e) {
                 System.out.println("Please enter a valid medication name");
                 tempName = input.nextLine();
