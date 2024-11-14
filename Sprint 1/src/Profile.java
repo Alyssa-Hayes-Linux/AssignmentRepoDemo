@@ -154,4 +154,14 @@ import java.util.regex.*;
                     "\nPronouns: " + pronoun +
                     "\nPassword: " + password;
         }
+        public void main(){
+            Public("Alyssa Hayes", "04/30/2005", "hayesae9@vcu.edu", "888-555-5555", "she/her",
+                    "blablabla", true)
+            Public("Alyssa Hayes", "04/30/2005", "hayesae9@vcu.edu", "888-555-5555", "she/her",
+                    "blablabla", true)
+            Public("SpongeBob Squarepants", "May/5/1999", "bob99@vcu.edu", "888-555-5555", "he/him",
+                    "krabbypatty", false)
+            Public("Alyssa Hayes", "04/30/2005", "hayesae9@vcu.edu", "she/her",
+                    "blablabla", true)
+        }
     }
