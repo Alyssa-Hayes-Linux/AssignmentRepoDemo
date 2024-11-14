@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.io.*;
-import java.util.HashSet;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.regex.*;
 
     public class Profile {
 
@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
         private String pronoun;
         private String password;
         private boolean notification;
+        ArrayList<Med> medList = new ArrayList<>();
 
         // Default constructor
         public Profile() {
@@ -28,7 +29,16 @@ import java.util.regex.Pattern;
             this.notification = false;
 
         }
+        public Profile(String string) {
+            this.name = "Ben Herbst";
+            this.dateOfBirth = "08/25/2005";
+            this.email = "herbstb@vcu.edu";
+            this.phone = "(703)869-2363";
+            this.pronoun = "he/him";
+            this.password = "";
+            this.notification = false;
 
+        }
 
         // Setters with validation
 
