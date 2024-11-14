@@ -1,12 +1,12 @@
 import java.io.IOException;
 import java.io.*;
-import java.util.HashSet;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.regex.*;
 
     public class Profile {
 
         // Static variable to store used emails
-        private static HashSet<String> emailTree = new HashSet<>();
+
 
         // Base variables
         private String name;
@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
         private String pronoun;
         private String password;
         private boolean notification;
+        ArrayList<Med> medList = new ArrayList<>();
 
         // Default constructor
         public Profile() {
@@ -28,7 +29,16 @@ import java.util.regex.Pattern;
             this.notification = false;
 
         }
+        public Profile(String string) {
+            this.name = "Ben Herbst";
+            this.dateOfBirth = "08/25/2005";
+            this.email = "herbstb@vcu.edu";
+            this.phone = "(703)869-2363";
+            this.pronoun = "he/him";
+            this.password = "";
+            this.notification = false;
 
+        }
 
         // Setters with validation
 
@@ -66,11 +76,7 @@ import java.util.regex.Pattern;
                 }
             }
             if(!flag) throw new FormatingException();
-            if (emailTree.contains(email)) {
-                throw new DuplicateProfileException("Email is already in use.");
-            }
             this.email = email;
-            emailTree.add(email); // Add email to the set
         }
 
         public void setPhone(String phone) throws FormatingException {
@@ -117,12 +123,21 @@ import java.util.regex.Pattern;
             return s.toString();
         }
 
+        public String toMaskEmail(String email){
+            StringBuilder s = new StringBuilder();
+            for(char c : email.toCharArray()) {
+                if(c == '@') break;
+                s.append('X');
+            }
+           return String.valueOf(s.append(email.substring(email.indexOf("@"))));
+        }
+
         // Profile display with masks
-        public void getProfileMasked() {
-            System.out.println("User Profile (Masked):" +
+        public String toStringMasked() {
+            return("User Profile (password not entered):" +
                     "\nName: " + name +
                     "\nDate of Birth: " + toMask(dateOfBirth) +
-                    "\nEmail: " + toMask(email) +
+                    "\nEmail: " + toMaskEmail(email) +
                     "\nPhone: " + toMask(phone) +
                     "\nPronouns: " + pronoun +
                     "\nPassword: " + toMaskPassword(password));
