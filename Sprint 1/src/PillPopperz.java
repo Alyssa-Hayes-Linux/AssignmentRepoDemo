@@ -5,7 +5,7 @@ import java.util.*;
 
 public class PillPopperz {
 
-    public static void main(String[] args) throws DuplicateProfileException {
+    public static void main(String[] args) {
         ArrayList<Profile> profileList = new ArrayList<>(); // List to store user profiles
         HashSet<String> emailTree = new HashSet<>(); // Set to track unique emails
         boolean exit = false;
@@ -102,9 +102,8 @@ public class PillPopperz {
      * and ensures the email is unique using emailTree.
      *
      * @return the created Profile object or null if creation is cancelled
-     * @throws DuplicateProfileException if email is already in use
      */
-    public static Profile newProfile(HashSet<String> emailTree) throws DuplicateProfileException {
+    public static Profile newProfile(HashSet<String> emailTree) {
         Scanner input = new Scanner(System.in);
 
         Profile toReturn = new Profile(); // Temporary profile object for data input
@@ -115,7 +114,9 @@ public class PillPopperz {
         boolean flag = true;
         String name = input.nextLine();
         if(name.equals("test")) {
+            emailTree.add("Herbstb@vcu.edu");
             return new Profile("test");
+
         }
         while (flag) {
             flag = false;
@@ -225,10 +226,11 @@ public class PillPopperz {
                 tempSelect = input.nextInt();
                 switch (tempSelect) {
                     case 1:
-                        toReturn.setNotification(tempSelect == 1);
+                        toReturn.setNotification(true);
                         flag = false;
                         break;
                     case 2:
+                        toReturn.setNotification(false);
                         flag = false;
                         break;
                     default:
@@ -378,7 +380,7 @@ public class PillPopperz {
         }
         newMed.setDaysOfWeek(tempDays);
         flag = true;
-        //input new meidcation time
+        //input new medication time
         System.out.println("Please enter a time in 24 hour format (00:00): ");
         LocalTime tempTime;
         while(flag) {
