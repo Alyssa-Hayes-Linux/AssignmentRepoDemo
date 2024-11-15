@@ -144,10 +144,19 @@ public class PillPopperz {
         }
 
         // Input pronouns
-        System.out.println("Please enter your pronouns:");
-        String pronoun = input.nextLine();
-        toReturn.setPronoun(pronoun.trim());
+        System.out.println("Please enter your pronouns in XXX/XXX format:");
+        flag = true;
+        while (flag) {
+            try {
+                String pronoun = input.nextLine();
+                toReturn.setPronoun(pronoun.trim());
+                flag = false;
 
+            } catch (FormatingException e) {
+                System.out.println("Please enter valid pronouns in XXX/XXX format");
+                flag = true;
+            }
+        }
         // Input and validate phone number
         System.out.println("Please enter your phone number in (XXX)XXX-XXXX format:");
         flag = true;
@@ -211,8 +220,28 @@ public class PillPopperz {
         int tempSelect = 0;
         System.out.println("1. Yes");
         System.out.println("2. No");
-        tempSelect = input.nextInt();
-        toReturn.setNotification(tempSelect == 1);
+        while (flag) {
+            try {
+                tempSelect = input.nextInt();
+                switch (tempSelect) {
+                    case 1:
+                        toReturn.setNotification(tempSelect == 1);
+                        flag = false;
+                        break;
+                    case 2:
+                        flag = false;
+                        break;
+                    default:
+                        throw new InputMismatchException();
+                }
+
+            }catch (InputMismatchException e){
+                System.out.println("Please enter a valid option");
+                input.nextLine();
+            }
+
+        }
+
 
         // Confirm profile information
         System.out.println("Is the following information correct?");

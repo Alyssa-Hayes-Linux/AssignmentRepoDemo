@@ -87,7 +87,11 @@ import java.util.regex.*;
             this.phone = phone;
         }
 
-        public void setPronoun(String pronoun) {
+        public void setPronoun(String pronoun) throws FormatingException {
+            // Regex for pronoun format (A-z)/(A-z)
+            if (!Pattern.matches("^[A-Za-z]+/[A-Za-z]+$", pronoun) || !pronoun.contains("/")) {
+                throw new FormatingException("Invalid pronoun format");
+            }
             this.pronoun = pronoun;
         }
 
