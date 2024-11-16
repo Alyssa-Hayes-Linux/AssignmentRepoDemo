@@ -311,15 +311,31 @@ public class PillPopperz {
         System.out.println("Please select an option:");
         if(!profile.medList.isEmpty()) {
             for (Med s : profile.medList) {
-                System.out.println("\t" + listNum + ". " + s.getName());
+                if(s.isTaken()){
+                    System.out.println("\t" + listNum++ + ". " + s.getName() + " (taken)");
+                }else {
+                    System.out.println("\t" + listNum++ + ". " + s.getName() + " (not taken)" );
+                }
+
             }
         }
         System.out.println("\t" + listNum + ". Add new medication");
         Scanner input = new Scanner(System.in);
-        int selected = input.nextInt();
-        if (selected == profile.medList.size() + 1) {
-            newMed(profile);
+        boolean flag = true;
+
+        while (flag) {
+            int selected = input.nextInt();
+            if (selected == profile.medList.size() + 1) {
+                newMed(profile);
+                flag = false;
+            } else if (selected <= profile.medList.size() && selected >= 1 ) {
+                //TODO NEW METHOD
+                System.out.println(profile.medList.get(selected - 1).medDetails());
+            } else {
+                System.out.println("Please choose a valid option");
+            }
         }
+
     }
 
     /**
@@ -356,6 +372,15 @@ public class PillPopperz {
                 tempName = input.nextLine();
             }
         }
+
+        String tempDosage = input.nextLine();
+        while (flag){
+            try {
+
+            }
+        }
+
+
         flag = true;
         // Input and validate medication days
         ArrayList<DayOfWeek> tempDays = new ArrayList<>();
@@ -396,4 +421,6 @@ public class PillPopperz {
         profile.medList.add(newMed);
         System.out.println("Medication successfully added");
     }
+
+
 }

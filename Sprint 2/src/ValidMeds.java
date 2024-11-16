@@ -836,5 +836,7 @@ public enum ValidMeds {
     ZYDELIG,
     ZYLOPRIM,
     ZYPREXA,
-    ZYTIGA
+    ZYTIGA,
+    VITAMIN_B,
+    VITAMIN_C
 }
