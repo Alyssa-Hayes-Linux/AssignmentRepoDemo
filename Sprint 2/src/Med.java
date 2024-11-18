@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.regex.*;
 public class Med {
     private String name;
     private LocalTime time;
@@ -14,8 +15,20 @@ public class Med {
 
     public Med() {
         this.name = "Not on file";
+        this.dosage = "Not on file";
         this.time = null;
         this.daysOfWeek = null;
+        this.taken = false;
+
+    }
+
+    public Med(String string){
+        this.name = "Tylenol";
+        this.dosage = "500mg";
+        this.time = LocalTime.parse("00:00");
+        this.daysOfWeek = new ArrayList<DayOfWeek>(Arrays.asList(DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.FRIDAY));
+        this.taken = false;
+
     }
     public void setName(String name) {
         this.name = name;
@@ -23,6 +36,23 @@ public class Med {
     public String getName() {
         return this.name;
     }
+
+    public void setDosage(String dosage) throws FormattingException {
+        String validUnits = String.join("|", ValidDosage.mg.name(), ValidDosage.mL.name(), ValidDosage.tsp.name(), ValidDosage.tbsp.name());
+        String regex = "\\d+(" + validUnits + ")";
+
+        // Check if the dosage matches the regex
+        if (!Pattern.matches(regex, dosage)) {
+            throw new FormattingException();
+        }
+        this.dosage = dosage;
+    }
+
+    public String getDosage() {
+        return dosage;
+    }
+
+
     public void setTime(LocalTime time) {
         this.time = time;
     }
@@ -43,13 +73,7 @@ public class Med {
         this.taken = taken;
     }
 
-    public String getDosage() {
-        return dosage;
-    }
 
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
-    }
 
     public String daysOfWeekToString(){
         StringBuilder toReturn = new StringBuilder();
@@ -82,6 +106,8 @@ public class Med {
                 "\n\tDosage: " + dosage +
                 "\n\tDays Taken: " + daysOfWeekToString() +
                 "\n\tTime Taken: " + time.toString() +
-                "\n\n\tTaken: " + taken;
+                "\n\n\tTaken: " + taken +
+                "\npress 1 to change status" +
+                "\npress 2 to go back/exit";
     }
 }

@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.*;
@@ -88,9 +87,11 @@ public class PillPopperz {
             }
         }
         System.out.println("\t" + profileNumber + ". New profile");
+        profileNumber++;
+        System.out.println("\t" + profileNumber + ". Go Back");
         Scanner input = new Scanner(System.in);
         int selected = input.nextInt();
-        while (selected < profileList.size() || selected < 1) {
+        while (selected < profileList.size() - 1|| selected < 1) {
             System.out.println("Input not valid. Please choose an available option.");
             selected = input.nextInt();
         }
@@ -122,7 +123,7 @@ public class PillPopperz {
             flag = false;
             try {
                 toReturn.setName(name.trim());
-            } catch (FormatingException e) {
+            } catch (FormattingException e) {
                 System.out.println("Please enter your first and last name separated by a space.");
                 name = input.nextLine();
                 flag = true;
@@ -137,7 +138,7 @@ public class PillPopperz {
             flag = false;
             try {
                 toReturn.setDateOfBirth(dateOfBirth.trim());
-            } catch (FormatingException e) {
+            } catch (FormattingException e) {
                 System.out.println("Please enter a valid date.");
                 dateOfBirth = input.nextLine();
                 flag = true;
@@ -153,7 +154,7 @@ public class PillPopperz {
                 toReturn.setPronoun(pronoun.trim());
                 flag = false;
 
-            } catch (FormatingException e) {
+            } catch (FormattingException e) {
                 System.out.println("Please enter valid pronouns in XXX/XXX format");
                 flag = true;
             }
@@ -166,7 +167,7 @@ public class PillPopperz {
             flag = false;
             try {
                 toReturn.setPhone(phone.trim());
-            } catch (FormatingException e) {
+            } catch (FormattingException e) {
                 System.out.println("Please enter a valid phone number.");
                 phone = input.nextLine();
                 flag = true;
@@ -188,7 +189,7 @@ public class PillPopperz {
 
                 emailTree.add(email); // Add email to the set
 
-            } catch (FormatingException e) {
+            } catch (FormattingException e) {
                 System.out.println("Please enter a valid email.");
                 email = input.nextLine();
                 flag = true;
@@ -285,17 +286,20 @@ public class PillPopperz {
         boolean flag = true;
         Scanner input = new Scanner(System.in);
 
-        System.out.println("Please select an option: \n\t1. View profile\n\t2. View medications");
+
 
         while (flag) {
+            System.out.println("Please select an option: \n\t1. View profile\n\t2. View medications\n\t3. Go Back");
             int option = input.nextInt();
             if (option == 1) {
                 System.out.println(profile.toStringMasked());
-                flag = false;
+
             } else if (option == 2) {
                 medMenu(profile);
                 flag = false;
-            }else { System.out.println("Please select a valid option"); }
+            } else if (option == 3) {
+                break;
+            } else { System.out.println("Please select a valid option"); }
         }
     }
 
@@ -325,12 +329,22 @@ public class PillPopperz {
 
         while (flag) {
             int selected = input.nextInt();
+            input.nextLine();
             if (selected == profile.medList.size() + 1) {
                 newMed(profile);
                 flag = false;
             } else if (selected <= profile.medList.size() && selected >= 1 ) {
                 //TODO NEW METHOD
                 System.out.println(profile.medList.get(selected - 1).medDetails());
+                String subSelect = input.nextLine();
+                input.nextLine();
+                while (!subSelect.equals("2")) {
+                    if (subSelect.equals("1")){
+                        profile.medList.get(selected - 1).setTaken(!profile.medList.get(selected - 1).isTaken());
+                    }
+                    input.nextLine();
+                    System.out.println(profile.medList.get(selected - 1).medDetails());
+                }
             } else {
                 System.out.println("Please choose a valid option");
             }
@@ -350,7 +364,9 @@ public class PillPopperz {
         String tempName = input.nextLine();
 
         Med newMed = new Med();
-
+        if(tempName.equals("test")){
+           return new Med("test");
+        }
         // Input and validate medication name
         boolean flag = true;
         while (flag) {
@@ -373,10 +389,16 @@ public class PillPopperz {
             }
         }
 
+        System.out.println("Please enter the medication dosage (including measurement i.e. mg, mL)");
         String tempDosage = input.nextLine();
+        flag = true;
         while (flag){
             try {
-
+                newMed.setDosage(tempDosage);
+                flag = false;
+            }catch (FormattingException e){
+                System.out.println("Please enter a valid dosage");
+                tempDosage = input.nextLine();;
             }
         }
 

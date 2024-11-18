@@ -838,5 +838,6 @@ public enum ValidMeds {
     ZYPREXA,
     ZYTIGA,
     VITAMIN_B,
+    VITAMIN_B12,
     VITAMIN_C
 }

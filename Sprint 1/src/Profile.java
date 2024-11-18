@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -43,9 +41,9 @@ import java.util.regex.*;
         // Setters with validation
 
         //DO NOT CHANGE
-        public void setName(String name) throws FormatingException {
+        public void setName(String name) throws FormattingException {
            if (name == null || name.trim().isEmpty() || !name.contains(" ") || name.indexOf(" ") == 0 || name.indexOf(" ") == name.length()-1) {
-                throw new FormatingException("Invalid name format.");
+                throw new FormattingException("Invalid name format.");
             }
             this.name = name;
         }
@@ -55,18 +53,18 @@ import java.util.regex.*;
         }
 
 
-        public void setDateOfBirth(String dateOfBirth) throws FormatingException {
+        public void setDateOfBirth(String dateOfBirth) throws FormattingException {
             // Simple regex for MM/DD/YYYY format
             if (!Pattern.matches("(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/(\\d{4})", dateOfBirth)) {
-                throw new FormatingException("Invalid date of birth format. Use MM/DD/YYYY.");
+                throw new FormattingException("Invalid date of birth format. Use MM/DD/YYYY.");
             }
             this.dateOfBirth = dateOfBirth;
         }
 
-        public void setEmail(String email) throws FormatingException, DuplicateProfileException {
+        public void setEmail(String email) throws FormattingException, DuplicateProfileException {
             String[] domains = {"@gmail.com", "@aol", "@yahoo.com", "@outlook.com", "@vcu.edu"};
             if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
-                throw new FormatingException("Invalid email format.");
+                throw new FormattingException("Invalid email format.");
             }
             boolean flag = false;
             for(String s : domains) {
@@ -75,22 +73,22 @@ import java.util.regex.*;
                     break;
                 }
             }
-            if(!flag) throw new FormatingException();
+            if(!flag) throw new FormattingException();
             this.email = email;
         }
 
-        public void setPhone(String phone) throws FormatingException {
+        public void setPhone(String phone) throws FormattingException {
             // Regex for phone number format (XXX)XXX-XXXX
             if (!Pattern.matches("\\(\\d{3}\\)\\d{3}-\\d{4}", phone)) {
-                throw new FormatingException("Invalid phone number format. Use (XXX)XXX-XXXX.");
+                throw new FormattingException("Invalid phone number format. Use (XXX)XXX-XXXX.");
             }
             this.phone = phone;
         }
 
-        public void setPronoun(String pronoun) throws FormatingException {
+        public void setPronoun(String pronoun) throws FormattingException {
             // Regex for pronoun format (A-z)/(A-z)
             if (!Pattern.matches("^[A-Za-z]+/[A-Za-z]+$", pronoun) || !pronoun.contains("/")) {
-                throw new FormatingException("Invalid pronoun format");
+                throw new FormattingException("Invalid pronoun format");
             }
             this.pronoun = pronoun;
         }
