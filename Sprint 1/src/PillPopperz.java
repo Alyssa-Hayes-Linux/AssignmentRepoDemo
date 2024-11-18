@@ -286,11 +286,11 @@ public class PillPopperz {
         boolean flag = true;
         Scanner input = new Scanner(System.in);
 
-
-
+        System.out.println("Please select an option: \n\t1. View profile\n\t2. View medications\n\t3. Go Back");
+        int option = input.nextInt();
         while (flag) {
-            System.out.println("Please select an option: \n\t1. View profile\n\t2. View medications\n\t3. Go Back");
-            int option = input.nextInt();
+
+
             if (option == 1) {
                 System.out.println(profile.toStringMasked());
 
@@ -300,6 +300,7 @@ public class PillPopperz {
             } else if (option == 3) {
                 break;
             } else { System.out.println("Please select a valid option"); }
+
         }
     }
 
@@ -328,23 +329,30 @@ public class PillPopperz {
         boolean flag = true;
 
         while (flag) {
-            int selected = input.nextInt();
-            input.nextLine();
+            int selected = -1;
+            while (selected < 1 || selected > profile.medList.size() + 1) {
+                try {
+                    selected = Integer.parseInt(input.nextLine());
+                } catch (InputMismatchException e) {
+                    System.out.println("Please enter a valid number.");
+                }
+            }
+
             if (selected == profile.medList.size() + 1) {
-                newMed(profile);
+                profile.medList.add(newMed(profile));
                 flag = false;
-            } else if (selected <= profile.medList.size() && selected >= 1 ) {
-                //TODO NEW METHOD
+            } else if (selected <= profile.medList.size()) {
                 System.out.println(profile.medList.get(selected - 1).medDetails());
                 String subSelect = input.nextLine();
-                input.nextLine();
-                while (!subSelect.equals("2")) {
-                    if (subSelect.equals("1")){
+                do {
+                    if (subSelect.equals("1")) {
                         profile.medList.get(selected - 1).setTaken(!profile.medList.get(selected - 1).isTaken());
+                        System.out.println(profile.medList.get(selected - 1).medDetails());
                     }
-                    input.nextLine();
-                    System.out.println(profile.medList.get(selected - 1).medDetails());
-                }
+                    subSelect = input.nextLine();
+
+                } while (!subSelect.equals("2"));
+                break;
             } else {
                 System.out.println("Please choose a valid option");
             }
