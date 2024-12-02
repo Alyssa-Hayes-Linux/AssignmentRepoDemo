@@ -48,9 +48,9 @@ public class PillPopperz {
     public static int mainMenu() {
         Scanner input = new Scanner(System.in);
         System.out.println("Main Menu:");
-        System.out.println("1. Select or Create Profile");
-        System.out.println("2. View All Profiles");
-        System.out.println("3. Exit");
+        System.out.println("\t1. Select or Create Profile");
+        System.out.println("\t2. View All Profiles");
+        System.out.println("\t3. Exit");
         System.out.print("Please select an option:\n");
         return input.nextInt();
     }
@@ -255,9 +255,9 @@ public class PillPopperz {
         System.out.println("Password: " + password);
         System.out.println("Notifications on? " + toReturn.isNotification());
 
-        System.out.println("1. Yes / Save");
-        System.out.println("2. No / Try Again");
-        System.out.println("3. Back To Home");
+        System.out.println("\t1. Yes / Save");
+        System.out.println("\t2. No / Try Again");
+        System.out.println("\t3. Back To Home");
 
         // Handle profile save or retry
         while (true) {
@@ -358,6 +358,7 @@ public class PillPopperz {
             }
         }
 
+
     }
 
     /**
@@ -365,7 +366,7 @@ public class PillPopperz {
      *
      * @param profile the profile to add medication to
      */
-    public static void newMed(Profile profile) {
+    public static Med newMed(Profile profile) {
         Scanner input = new Scanner(System.in);
         System.out.println("Please enter the medication name (generic or brand name):");
 
@@ -421,20 +422,22 @@ public class PillPopperz {
             while (flag){
                 switch (input.nextInt()){
                     case 1:
+                        input.nextLine();
                         tempDays.add(d);
                         flag = false;
                         break;
                     case 2:
+                        input.nextLine();
                         flag = false;
                         break;
                     default:
+                        input.nextLine();
                         System.out.println("Please select a valid option");
                 }
             }
             flag = true;
         }
         newMed.setDaysOfWeek(tempDays);
-        flag = true;
         //input new medication time
         System.out.println("Please enter a time in 24 hour format (00:00): ");
         LocalTime tempTime;
@@ -448,8 +451,8 @@ public class PillPopperz {
             }
         }
         //add new medication to list
-        profile.medList.add(newMed);
         System.out.println("Medication successfully added");
+        return newMed;
     }
 
 

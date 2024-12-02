@@ -107,7 +107,8 @@ public class Med {
                 "\n\tDays Taken: " + daysOfWeekToString() +
                 "\n\tTime Taken: " + time.toString() +
                 "\n\n\tTaken: " + taken +
-                "\npress 1 to change status" +
-                "\npress 2 to go back/exit";
+                "\nPlease select a medication option:" +
+                "\n\t1. Change medication status" +
+                "\n\t2. Exit menu";
     }
 }
