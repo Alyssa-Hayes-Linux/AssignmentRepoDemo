@@ -77,6 +77,7 @@ public class PillPopperz {
      * @param profileList list of profiles
      * @return the index of the selected profile or option to create a new profile
      */
+
     public static int menuProfileSelect(ArrayList<Profile> profileList) {
         int profileNumber = 1;
         System.out.println("Please select a profile option:");
@@ -255,9 +256,9 @@ public class PillPopperz {
         System.out.println("Password: " + password);
         System.out.println("Notifications on? " + toReturn.isNotification());
 
-        System.out.println("\t1. Yes / Save");
-        System.out.println("\t2. No / Try Again");
-        System.out.println("\t3. Back To Home");
+        System.out.println("1. Yes / Save");
+        System.out.println("2. No / Try Again");
+        System.out.println("3. Back To Home");
 
         // Handle profile save or retry
         while (true) {
@@ -339,7 +340,7 @@ public class PillPopperz {
             }
 
             if (selected == profile.medList.size() + 1) {
-                profile.medList.add(newMed(profile));
+                newMed(profile);
                 flag = false;
             } else if (selected <= profile.medList.size()) {
                 System.out.println(profile.medList.get(selected - 1).medDetails());
@@ -358,7 +359,6 @@ public class PillPopperz {
             }
         }
 
-
     }
 
     /**
@@ -366,7 +366,7 @@ public class PillPopperz {
      *
      * @param profile the profile to add medication to
      */
-    public static Med newMed(Profile profile) {
+    public static void newMed(Profile profile) {
         Scanner input = new Scanner(System.in);
         System.out.println("Please enter the medication name (generic or brand name):");
 
@@ -374,7 +374,7 @@ public class PillPopperz {
 
         Med newMed = new Med();
         if(tempName.equals("test")){
-           return new Med("test");
+           profile.medList.add(new Med("test"));
         }
         // Input and validate medication name
         boolean flag = true;
@@ -415,34 +415,42 @@ public class PillPopperz {
         flag = true;
         // Input and validate medication days
         ArrayList<DayOfWeek> tempDays = new ArrayList<>();
-        for (DayOfWeek d : DayOfWeek.values()) {
-            System.out.println("Would you like to take on " + d + "?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            while (flag){
-                switch (input.nextInt()){
-                    case 1:
-                        input.nextLine();
-                        tempDays.add(d);
-                        flag = false;
-                        break;
-                    case 2:
-                        input.nextLine();
-                        flag = false;
-                        break;
-                    default:
-                        input.nextLine();
-                        System.out.println("Please select a valid option");
+        boolean flag1 = true;
+        while(flag1) {
+            for (DayOfWeek d : DayOfWeek.values()) {
+                System.out.println("Would you like to take on " + d + "?");
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                while (flag) {
+                    switch (input.nextInt()) {
+                        case 1:
+                            tempDays.add(d);
+                            flag = false;
+                            break;
+                        case 2:
+                            flag = false;
+                            break;
+                        default:
+                            System.out.println("Please select a valid option");
+                    }
                 }
+                flag = true;
             }
-            flag = true;
+            if(tempDays.isEmpty()) {
+                System.out.println("Please select at least one day.");
+            }
+            else {
+                newMed.setDaysOfWeek(tempDays);
+                flag1 = false;
+            }
         }
-        newMed.setDaysOfWeek(tempDays);
         //input new medication time
         System.out.println("Please enter a time in 24 hour format (00:00): ");
         LocalTime tempTime;
         while(flag) {
             try{
+                //Fixed extra error message caused by the time set code block
+                input.nextLine();
                 tempTime = LocalTime.parse(input.nextLine());
                 newMed.setTime(tempTime);
                 flag = false;
@@ -451,8 +459,8 @@ public class PillPopperz {
             }
         }
         //add new medication to list
+        profile.medList.add(newMed);
         System.out.println("Medication successfully added");
-        return newMed;
     }
 
 
