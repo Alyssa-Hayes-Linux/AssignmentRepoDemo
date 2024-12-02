@@ -157,7 +157,6 @@ public class PillPopperz {
 
             } catch (FormattingException e) {
                 System.out.println("Please enter valid pronouns in XXX/XXX format");
-                flag = true;
             }
         }
         // Input and validate phone number
@@ -220,7 +219,7 @@ public class PillPopperz {
 
         // Ask for notification preference
         System.out.println("Would you like to turn on notifications?");
-        int tempSelect = 0;
+        int tempSelect;
         System.out.println("1. Yes");
         System.out.println("2. No");
         while (flag) {
@@ -310,8 +309,7 @@ public class PillPopperz {
      *
      * @param profile user profile to manage medications
      */
-    //TODO: NEEDS SUPPORT FOR CHOOSING AN INVALID OPTION
-    //TODO: ADD SUPPORT FOR VIEWING MEDICATIONS
+
     public static void medMenu(Profile profile) {
         int listNum = 1;
         System.out.println("Please select an option:");
@@ -326,36 +324,40 @@ public class PillPopperz {
             }
         }
         System.out.println("\t" + listNum + ". Add new medication");
+        System.out.println("\t" + (listNum + 1) + ". Go Back");
         Scanner input = new Scanner(System.in);
         boolean flag = true;
+        int selected = input.nextInt();
+        if (selected != (listNum + 1)){
+            while (flag) {
 
-        while (flag) {
-            int selected = -1;
-            while (selected < 1 || selected > profile.medList.size() + 1) {
-                try {
-                    selected = Integer.parseInt(input.nextLine());
-                } catch (InputMismatchException e) {
-                    System.out.println("Please enter a valid number.");
-                }
-            }
+                while (selected < 1 || selected > profile.medList.size() + 1) {
+                    try {
+                        selected = Integer.parseInt(input.nextLine());
 
-            if (selected == profile.medList.size() + 1) {
-                newMed(profile);
-                flag = false;
-            } else if (selected <= profile.medList.size()) {
-                System.out.println(profile.medList.get(selected - 1).medDetails());
-                String subSelect = input.nextLine();
-                do {
-                    if (subSelect.equals("1")) {
-                        profile.medList.get(selected - 1).setTaken(!profile.medList.get(selected - 1).isTaken());
-                        System.out.println(profile.medList.get(selected - 1).medDetails());
+                    } catch (InputMismatchException e) {
+                        System.out.println("Please enter a valid number.");
                     }
-                    subSelect = input.nextLine();
+                }
 
-                } while (!subSelect.equals("2"));
-                break;
-            } else {
-                System.out.println("Please choose a valid option");
+                if (selected == profile.medList.size() + 1) {
+                    newMed(profile);
+                    flag = false;
+                } else if (selected <= profile.medList.size()) {
+                    System.out.println(profile.medList.get(selected - 1).medDetails());
+                    String subSelect = input.nextLine();
+                    do {
+                        if (subSelect.equals("1")) {
+                            profile.medList.get(selected - 1).setTaken(!profile.medList.get(selected - 1).isTaken());
+                            System.out.println(profile.medList.get(selected - 1).medDetails());
+                        }
+                        subSelect = input.nextLine();
+
+                    } while (!subSelect.equals("2"));
+                    break;
+                } else {
+                    System.out.println("Please choose a valid option");
+                }
             }
         }
 
@@ -373,94 +375,96 @@ public class PillPopperz {
         String tempName = input.nextLine();
 
         Med newMed = new Med();
-        if(tempName.equals("test")){
-           profile.medList.add(new Med("test"));
-        }
+
         // Input and validate medication name
         boolean flag = true;
-        while (flag) {
-            try {
-                for(ValidMeds med : ValidMeds.values()){
-                    if(tempName.equalsIgnoreCase(med.toString())){
-                        newMed.setName(tempName);
-                        flag = false;
-                        break;
-                    }
+        if (tempName.equals("test")) {
+            profile.medList.add(new Med("test"));
+        } else {
+            while (flag) {
+                try {
 
-                }
-                if (flag){
-                    throw new Exception();
-                }
-
-            } catch (Exception e) {
-                System.out.println("Please enter a valid medication name");
-                tempName = input.nextLine();
-            }
-        }
-
-        System.out.println("Please enter the medication dosage (including measurement i.e. mg, mL)");
-        String tempDosage = input.nextLine();
-        flag = true;
-        while (flag){
-            try {
-                newMed.setDosage(tempDosage);
-                flag = false;
-            }catch (FormattingException e){
-                System.out.println("Please enter a valid dosage");
-                tempDosage = input.nextLine();;
-            }
-        }
-
-
-        flag = true;
-        // Input and validate medication days
-        ArrayList<DayOfWeek> tempDays = new ArrayList<>();
-        boolean flag1 = true;
-        while(flag1) {
-            for (DayOfWeek d : DayOfWeek.values()) {
-                System.out.println("Would you like to take on " + d + "?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                while (flag) {
-                    switch (input.nextInt()) {
-                        case 1:
-                            tempDays.add(d);
+                    for (ValidMeds med : ValidMeds.values()) {
+                        if (tempName.equalsIgnoreCase(med.toString())) {
+                            newMed.setName(tempName);
                             flag = false;
                             break;
-                        case 2:
-                            flag = false;
-                            break;
-                        default:
-                            System.out.println("Please select a valid option");
+                        }
+
                     }
+                    if (flag) {
+                        throw new Exception();
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Please enter a valid medication name");
+                    tempName = input.nextLine();
                 }
-                flag = true;
             }
-            if(tempDays.isEmpty()) {
-                System.out.println("Please select at least one day.");
+
+            System.out.println("Please enter the medication dosage (including measurement i.e. mg, mL)");
+            String tempDosage = input.nextLine();
+            flag = true;
+            while (flag) {
+                try {
+                    newMed.setDosage(tempDosage);
+                    flag = false;
+                } catch (FormattingException e) {
+                    System.out.println("Please enter a valid dosage");
+                    tempDosage = input.nextLine();
+                }
             }
-            else {
-                newMed.setDaysOfWeek(tempDays);
-                flag1 = false;
+
+
+            flag = true;
+            // Input and validate medication days
+            ArrayList<DayOfWeek> tempDays = new ArrayList<>();
+            boolean flag1 = true;
+            while (flag1) {
+                for (DayOfWeek d : DayOfWeek.values()) {
+                    System.out.println("Would you like to take on " + d + "?");
+                    System.out.println("1. Yes");
+                    System.out.println("2. No");
+                    while (flag) {
+                        switch (input.nextInt()) {
+                            case 1:
+                                tempDays.add(d);
+                                flag = false;
+                                break;
+                            case 2:
+                                flag = false;
+                                break;
+                            default:
+                                System.out.println("Please select a valid option");
+                        }
+                    }
+                    flag = true;
+                }
+                if (tempDays.isEmpty()) {
+                    System.out.println("Please select at least one day.");
+                } else {
+                    newMed.setDaysOfWeek(tempDays);
+                    flag1 = false;
+                }
             }
+            //input new medication time
+            System.out.println("Please enter a time in 24 hour format (00:00): ");
+            LocalTime tempTime;
+            while (flag) {
+                try {
+                    //Fixed extra error message caused by the time set code block
+                    input.nextLine();
+                    tempTime = LocalTime.parse(input.nextLine());
+                    newMed.setTime(tempTime);
+                    flag = false;
+                } catch (Exception e) {
+                    System.out.println("Please enter a valid time:");
+                }
+            }
+            //add new medication to list
+            profile.medList.add(newMed);
+            System.out.println("Medication successfully added");
         }
-        //input new medication time
-        System.out.println("Please enter a time in 24 hour format (00:00): ");
-        LocalTime tempTime;
-        while(flag) {
-            try{
-                //Fixed extra error message caused by the time set code block
-                input.nextLine();
-                tempTime = LocalTime.parse(input.nextLine());
-                newMed.setTime(tempTime);
-                flag = false;
-            } catch (Exception e) {
-                System.out.println("Please enter a valid time:");
-            }
-        }
-        //add new medication to list
-        profile.medList.add(newMed);
-        System.out.println("Medication successfully added");
     }
 
 
