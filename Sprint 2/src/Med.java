@@ -1,7 +1,7 @@
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.awt.Toolkit;
+
 import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.*;
@@ -9,6 +9,7 @@ public class Med {
     private String name;
     private LocalTime time;
     private ArrayList<DayOfWeek> daysOfWeek;
+    private LocalDateTime lastNotification;
 
     private boolean taken;
 
@@ -20,15 +21,17 @@ public class Med {
         this.time = null;
         this.daysOfWeek = null;
         this.taken = false;
+        this.lastNotification = null;
 
     }
 
     public Med(String string){
         this.name = "Tylenol";
         this.dosage = "500mg";
-        this.time = LocalTime.parse("00:00");
-        this.daysOfWeek = new ArrayList<DayOfWeek>(Arrays.asList(DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.FRIDAY));
+        this.time = LocalTime.parse("17:05");
+        this.daysOfWeek = new ArrayList<DayOfWeek>(Arrays.asList(DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.FRIDAY, DayOfWeek.WEDNESDAY));
         this.taken = false;
+        this.lastNotification = null;
 
     }
     public void setName(String name) {
@@ -75,6 +78,13 @@ public class Med {
     }
 
 
+    public LocalDateTime getLastNotification(){
+        return lastNotification;
+    }
+
+    public void setLastNotification(LocalDateTime lastNotification){
+        this.lastNotification = lastNotification;
+    }
 
     public String daysOfWeekToString(){
         StringBuilder toReturn = new StringBuilder();

@@ -1,6 +1,9 @@
-import java.time.DayOfWeek;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.awt.Toolkit;
 
 public class PillPopperz {
 
@@ -290,13 +293,38 @@ public class PillPopperz {
             Scanner input = new Scanner(System.in);
 
             System.out.println("Login Sucessful!");
+
+            if (profile.isNotification() && !profile.medList.isEmpty()) {
+                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+                scheduler.scheduleAtFixedRate(() -> {
+                    LocalTime now = LocalTime.now();
+                    LocalDate today = LocalDate.now();
+                    DayOfWeek currentDay = today.getDayOfWeek();
+
+                    for (Med med : profile.medList) {
+                        // Check if today is a scheduled day for the medication
+                        if (med.getDaysOfWeek().contains(currentDay) && !med.isTaken()) {
+                            // Check if the current time is within 1 minute of the scheduled medication time
+                            LocalTime medTime = med.getTime();
+                            if (now.isAfter(medTime.minusMinutes(1)) && now.isBefore(medTime.plusMinutes(1))) {
+                                // Check if more than an hour has passed since the last notification
+                                if (med.getLastNotification() == null || Duration.between(med.getLastNotification(), now).toHours() >= 1) {
+                                    Toolkit.getDefaultToolkit().beep(); // Notify user
+                                    System.out.println("Time to take your medication: " + med.getName());
+
+                                    // Update the last notification time
+                                    med.setLastNotification(LocalDateTime.from(now));
+                                }
+                            }
+                        }
+                    }
+                }, 0, 5, TimeUnit.SECONDS); // Runs every 5 seconds
+            }
+
             while (flag) {
                 System.out.println("Welcome " + profile.getName() + "! Please select an option: \n\t1. View profile\n\t2. View medications\n\t3. Go Back");
-//                if(profile.isNotification() && !profile.medList.isEmpty()){
-//                    for (int i = 0; i < profile.medList.size(); i++){
-//
-//                    }
-//                }
+
                 int option = input.nextInt();
                 if (option == 1) {
                     System.out.println(profile.toStringMasked());
@@ -513,6 +541,5 @@ public class PillPopperz {
 
         return false;
     }
-
 
 }

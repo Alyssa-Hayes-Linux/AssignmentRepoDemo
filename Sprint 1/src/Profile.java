@@ -34,7 +34,7 @@ import java.util.regex.*;
             this.phone = "(703)869-2363";
             this.pronoun = "he/him";
             this.password = "123test";
-            this.notification = false;
+            this.notification = true;
 
         }
 
