@@ -402,7 +402,24 @@ public class PillPopperz {
                     do {
                         if (subSelect.equals("1")) {
                             profile.medList.get(selected - 1).setTaken(!profile.medList.get(selected - 1).isTaken());
+
+                            if(profile.medList.get(selected-1).isTaken()){
+                                System.out.println("\nThank you for taking your medication!");
+                            } else{
+                                Duration duration = Duration.between(LocalTime.now(), profile.medList.get(selected-1).getTime());
+                                long hours = duration.toHours();
+                                long minutes = duration.toMinutes() % 60;
+                                if(LocalTime.now().isBefore(profile.medList.get(selected-1).getTime()) && profile.medList.get(selected-1).getDaysOfWeek().contains(LocalDate.now().getDayOfWeek())){
+                                    System.out.println("Time left: " + hours + "hour(s) " + minutes +" minute(s)");
+                                } else if ((LocalTime.now().isAfter(profile.medList.get(selected-1).getTime()) || LocalTime.now().equals(profile.medList.get(selected-1).getTime()))
+                                        && profile.medList.get(selected-1).getDaysOfWeek().contains(LocalDate.now().getDayOfWeek()) ) {
+                                    System.out.println("Medication overdue! Was supposed to be taken at " + profile.medList.get(selected-1).getTime() + " - make sure to take your "
+                                    + profile.medList.get(selected-1).getName());
+                                }
+                            }
+
                             System.out.println(profile.medList.get(selected - 1).medDetails());
+
                         }
                         subSelect = input.nextLine();
 
