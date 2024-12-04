@@ -92,7 +92,7 @@ public class PillPopperz {
         System.out.println("\t" + profileNumber + ". Go Back");
         Scanner input = new Scanner(System.in);
         int selected = input.nextInt();
-        while (selected < profileList.size() - 1|| selected < 1) {
+        while (selected < profileList.size() - 1 || selected < 1) {
             System.out.println("Input not valid. Please choose an available option.");
             selected = input.nextInt();
         }
@@ -100,7 +100,7 @@ public class PillPopperz {
     }
 
     /**
-     * Creates a new profile by gathering input from the user, validates fields, 
+     * Creates a new profile by gathering input from the user, validates fields,
      * and ensures the email is unique using emailTree.
      *
      * @return the created Profile object or null if creation is cancelled
@@ -115,7 +115,7 @@ public class PillPopperz {
         System.out.println("Please enter your first and last name separated by a space:");
         boolean flag = true;
         String name = input.nextLine();
-        if(name.equals("test")) {
+        if (name.equals("test")) {
             emailTree.add("Herbstb@vcu.edu");
             return new Profile("test");
 
@@ -183,7 +183,7 @@ public class PillPopperz {
             try {
                 toReturn.setEmail(email.trim());
 
-                if(emailTree.contains(email)){
+                if (emailTree.contains(email)) {
                     throw new DuplicateProfileException();
                 }
 
@@ -238,7 +238,7 @@ public class PillPopperz {
                         throw new InputMismatchException();
                 }
 
-            }catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Please enter a valid option");
                 input.nextLine();
             }
@@ -283,24 +283,49 @@ public class PillPopperz {
      * @param profile user profile entered in main interface
      */
     public static void mainMenu(Profile profile) {
-        boolean flag = true;
-        Scanner input = new Scanner(System.in);
+        //TODO: add password section
+        boolean loggedIn = Login(profile);
+        if (loggedIn) {
+            boolean flag = true;
+            Scanner input = new Scanner(System.in);
 
-        System.out.println("Please select an option: \n\t1. View profile\n\t2. View medications\n\t3. Go Back");
-        int option = input.nextInt();
-        while (flag) {
+            System.out.println("Login Sucessful!");
+            while (flag) {
+                System.out.println("Welcome " + profile.getName() + "! Please select an option: \n\t1. View profile\n\t2. View medications\n\t3. Go Back");
+//                if(profile.isNotification() && !profile.medList.isEmpty()){
+//                    for (int i = 0; i < profile.medList.size(); i++){
+//
+//                    }
+//                }
+                int option = input.nextInt();
+                if (option == 1) {
+                    System.out.println(profile.toStringMasked());
 
+                    System.out.println("\nWould you like to see your information?\n\t1.Yes\n\t2.No");
+                    option = input.nextInt();
+                    while (option != 2) {
+                        if (option == 1) {
+                            loggedIn = Login(profile);
+                            if (loggedIn) {
+                                System.out.println(profile.toString());
+                                break;
+                            }
+                        } else {
+                            System.out.println("Please Select a valid option.");
+                            option = input.nextInt();
+                        }
+                    }
 
-            if (option == 1) {
-                System.out.println(profile.toStringMasked());
+                } else if (option == 2) {
+                    medMenu(profile);
+                    flag = false;
+                } else if (option == 3) {
+                    break;
+                } else {
+                    System.out.println("Please select a valid option");
+                }
 
-            } else if (option == 2) {
-                medMenu(profile);
-                flag = false;
-            } else if (option == 3) {
-                break;
-            } else { System.out.println("Please select a valid option"); }
-
+            }
         }
     }
 
@@ -313,12 +338,12 @@ public class PillPopperz {
     public static void medMenu(Profile profile) {
         int listNum = 1;
         System.out.println("Please select an option:");
-        if(!profile.medList.isEmpty()) {
+        if (!profile.medList.isEmpty()) {
             for (Med s : profile.medList) {
-                if(s.isTaken()){
+                if (s.isTaken()) {
                     System.out.println("\t" + listNum++ + ". " + s.getName() + " (taken)");
-                }else {
-                    System.out.println("\t" + listNum++ + ". " + s.getName() + " (not taken)" );
+                } else {
+                    System.out.println("\t" + listNum++ + ". " + s.getName() + " (not taken)");
                 }
 
             }
@@ -328,7 +353,7 @@ public class PillPopperz {
         Scanner input = new Scanner(System.in);
         boolean flag = true;
         int selected = input.nextInt();
-        if (selected != (listNum + 1)){
+        if (selected != (listNum + 1)) {
             while (flag) {
 
                 while (selected < 1 || selected > profile.medList.size() + 1) {
@@ -465,6 +490,28 @@ public class PillPopperz {
             profile.medList.add(newMed);
             System.out.println("Medication successfully added");
         }
+    }
+
+    public static boolean Login(Profile selected) {
+        System.out.println("Please enter password or type 'exit' to go back:");
+        Scanner input = new Scanner(System.in);
+        boolean flag = true;
+
+        while (flag) {
+            String entered = input.nextLine();
+            if (entered.equalsIgnoreCase("exit")) {
+                flag = false;
+                return false;
+            }
+            if (entered.equals(selected.getPassword())) {
+                flag = false;
+                return true;
+            } else {
+                System.out.println("Login attempt unsucesssful, please try again.");
+            }
+        }
+
+        return false;
     }
 
 

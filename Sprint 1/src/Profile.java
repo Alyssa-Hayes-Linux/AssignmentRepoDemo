@@ -33,7 +33,7 @@ import java.util.regex.*;
             this.email = "herbstb@vcu.edu";
             this.phone = "(703)869-2363";
             this.pronoun = "he/him";
-            this.password = "";
+            this.password = "123test";
             this.notification = false;
 
         }
@@ -93,6 +93,10 @@ import java.util.regex.*;
             this.pronoun = pronoun;
         }
 
+        public String getPassword() {
+            return password;
+        }
+
         public void setPassword(String password) {
             this.password = password;
         }
@@ -142,7 +146,7 @@ import java.util.regex.*;
                     "\nEmail: " + toMaskEmail(email) +
                     "\nPhone: " + toMask(phone) +
                     "\nPronouns: " + pronoun +
-                    "\nPassword: " + toMaskPassword(password));
+                    "\nPassword: " + toMaskPassword(password)) +"\n";
         }
 
         // Override toString method
@@ -154,7 +158,7 @@ import java.util.regex.*;
                     "\nEmail: " + email +
                     "\nPhone: " + phone +
                     "\nPronouns: " + pronoun +
-                    "\nPassword: " + password;
+                    "\nPassword: " + password +"\n";
         }
 //        public void main(){
 //            Public("Alyssa Hayes", "04/30/2005", "hayesae9@vcu.edu", "888-555-5555", "she/her",

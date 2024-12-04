@@ -1,6 +1,7 @@
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.awt.Toolkit;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.*;
@@ -39,7 +40,7 @@ public class Med {
 
     public void setDosage(String dosage) throws FormattingException {
         String validUnits = String.join("|", ValidDosage.mg.name(), ValidDosage.mL.name(), ValidDosage.tsp.name(), ValidDosage.tbsp.name());
-        String regex = "\\d+(" + validUnits + ")";
+        String regex = "\\d+(\\.\\d+)?(" + validUnits + ")";
 
         // Check if the dosage matches the regex
         if (!Pattern.matches(regex, dosage)) {
