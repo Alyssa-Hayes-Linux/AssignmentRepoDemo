@@ -398,7 +398,7 @@ public class PillPopperz {
                     flag = false;
                 } else if (selected <= profile.medList.size()) {
                     System.out.println(profile.medList.get(selected - 1).medDetails());
-                    String subSelect = input.nextLine();
+                    String subSelect = input.nextLine();/
                     do {
                         if (subSelect.equals("1")) {
                             profile.medList.get(selected - 1).setTaken(!profile.medList.get(selected - 1).isTaken());
